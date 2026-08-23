@@ -1,0 +1,45 @@
+{
+  "id": "leadopsDemoWebhook",
+  "name": "LeadOps AI demo webhook",
+  "active": false,
+  "nodes": [
+    {
+      "parameters": {
+        "httpMethod": "POST",
+        "path": "leadops-demo",
+        "responseMode": "responseNode",
+        "options": {}
+      },
+      "id": "21a2f419-73a1-4a7e-9f91-d62c52015e37",
+      "name": "LeadOps webhook",
+      "type": "n8n-nodes-base.webhook",
+      "typeVersion": 2,
+      "position": [260, 300],
+      "webhookId": "leadops-demo"
+    },
+    {
+      "parameters": {
+        "respondWith": "json",
+        "responseBody": "={{ { accepted: true, reference: $json.body.conversation.reference, event: $json.body.event } }}",
+        "options": {}
+      },
+      "id": "2517ff5c-f7f3-4db1-8f80-8be6ce36499d",
+      "name": "Acknowledge delivery",
+      "type": "n8n-nodes-base.respondToWebhook",
+      "typeVersion": 1.4,
+      "position": [500, 300]
+    }
+  ],
+  "connections": {
+    "LeadOps webhook": {
+      "main": [[{ "node": "Acknowledge delivery", "type": "main", "index": 0 }]]
+    }
+  },
+  "settings": {
+    "executionOrder": "v1"
+  },
+  "staticData": null,
+  "pinData": {},
+  "tags": []
+}
+

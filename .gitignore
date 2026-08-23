@@ -1,0 +1,15 @@
+.env
+.DS_Store
+*.db
+*.sqlite
+*.sqlite3
+__pycache__/
+*.py[cod]
+.pytest_cache/
+.venv/
+node_modules/
+.next/
+*.tsbuildinfo
+coverage/
+n8n/data/
+
