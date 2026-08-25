@@ -1,8 +1,7 @@
 /** @type {import('next').NextConfig} */
 const nextConfig = {
-  output: "standalone",
   reactStrictMode: true,
+  ...(process.env.VERCEL ? {} : { output: "standalone" }),
 };
 
 export default nextConfig;
-
