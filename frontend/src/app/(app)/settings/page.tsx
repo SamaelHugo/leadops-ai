@@ -94,9 +94,9 @@ export default function SettingsPage() {
   return (
     <>
       <PageHeader
-        eyebrow="Workspace administration"
-        title="Settings"
-        description="Manage the organization, team access, and the public intake address."
+        eyebrow="Settings / Workspace"
+        title="One workspace, clearly owned."
+        description="Manage your organization, team accounts, and public contact form."
       />
       {error ? <ErrorNotice message={error} /> : null}
       {success ? <SuccessNotice message={success} /> : null}

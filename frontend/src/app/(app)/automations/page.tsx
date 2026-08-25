@@ -26,7 +26,13 @@ export default function AutomationsPage() {
     setSuccess("");
     try {
       const result = await api.retryWebhook(delivery.id);
-      setSuccess(`Webhook delivered on attempt ${result.attempt_count}.`);
+      if (result.status === "delivered") {
+        setSuccess(`Webhook delivered on attempt ${result.attempt_count}.`);
+      } else {
+        setError(
+          `Webhook attempt ${result.attempt_count} failed.${result.last_error ? ` ${result.last_error}` : ""}`,
+        );
+      }
       await load();
     } catch (caught) {
       setError(caught instanceof Error ? caught.message : "Webhook retry failed.");
@@ -39,9 +45,9 @@ export default function AutomationsPage() {
   return (
     <>
       <PageHeader
-        eyebrow="Workflow delivery"
-        title="Automations"
-        description="Inspect every n8n call. A failed delivery keeps its payload and can be retried without resending the customer reply."
+        eyebrow="Automations / Delivery"
+        title="Every handoff has a receipt."
+        description="See each n8n request and retry a failure without sending the customer reply again."
         actions={<Link className="button secondary" href="/integrations">Configure n8n</Link>}
       />
       {error ? <ErrorNotice message={error} /> : null}
@@ -80,4 +86,3 @@ export default function AutomationsPage() {
     </>
   );
 }
-

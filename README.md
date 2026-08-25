@@ -69,6 +69,26 @@ Open these addresses:
 
 The backend runs the Alembic migration and creates the demo workspace on its first start.
 
+## Public customer preview
+
+The repository includes a Vercel Services configuration for the Next.js frontend and FastAPI backend. The backend is mounted at `/backend`, so both services use one public domain and the browser does not need a separate CORS origin.
+
+Create a Vercel project with the Services framework preset, then add these environment variables:
+
+```text
+DATABASE_URL=postgresql://...
+JWT_SECRET=<at least 32 random characters>
+SEED_DEMO_DATA=true
+LLM_PROVIDER=mock
+EMBEDDINGS_PROVIDER=local
+```
+
+Use a pooled PostgreSQL connection for serverless traffic. Supabase transaction pooler connections use port `6543`; LeadOps disables prepared statements and application-side pooling when it runs on Vercel.
+
+If `DATABASE_URL` is missing on Vercel, the backend falls back to `/tmp/leadops.db`. That is useful for a quick visual preview, but the data can disappear after a cold start. Use PostgreSQL for a customer demo where uploads, inquiries, and approvals must persist.
+
+Vercel does not run the bundled n8n container. Point the n8n integration to a reachable n8n instance before demonstrating successful webhook delivery. Failed demo deliveries remain visible in Automations and can be retried.
+
 ## Demo account
 
 The sign-in form is prefilled with the administrator account:
@@ -205,4 +225,3 @@ CRM and webhook failures do not erase the sent customer reply. They produce erro
 - URL indexing blocks private and local network addresses by default to reduce SSRF risk.
 - Application queries enforce tenant separation. Add PostgreSQL row-level security before serving tenants that require database-level isolation.
 - Background jobs, email delivery, subscriptions, voice, WhatsApp, and additional CRMs are outside this MVP.
-

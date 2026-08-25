@@ -31,9 +31,9 @@ export default function ActivityPage() {
   return (
     <>
       <PageHeader
-        eyebrow="Audit trail"
-        title="Activity log"
-        description="Customer actions, team decisions, CRM updates, AI failures, and webhook attempts stay in one timeline."
+        eyebrow="Activity / Audit trail"
+        title="Nothing happens off the record."
+        description="Customer submissions, team decisions, CRM updates, and delivery errors stay visible here."
         actions={
           <div className="filter-tabs">
             {[

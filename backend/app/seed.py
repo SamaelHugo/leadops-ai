@@ -12,6 +12,7 @@ from .models import (
     Organization,
     ResponseDraft,
     User,
+    WebhookDelivery,
     utcnow,
 )
 from .schemas import PublicInquiryCreate
@@ -181,16 +182,71 @@ def seed_demo(db: Session) -> None:
             is_demo=True,
         )
     )
-    db.add(
-        CRMRecord(
-            organization_id=organization.id,
-            conversation_id=third.id,
-            provider="test",
-            object_type="ticket",
-            external_id=f"demo_{third.id[:12]}",
-            payload={"demo": True, "status": "new"},
-            is_demo=True,
-        )
+    crm_record = CRMRecord(
+        organization_id=organization.id,
+        conversation_id=third.id,
+        provider="test",
+        object_type="ticket",
+        external_id=f"demo_{third.id[:12]}",
+        payload={"demo": True, "status": "new"},
+        is_demo=True,
+    )
+    db.add(crm_record)
+    db.flush()
+    log_activity(
+        db,
+        organization_id=organization.id,
+        user_id=admin.id,
+        conversation_id=third.id,
+        action="crm.synced",
+        entity_type="crm_record",
+        entity_id=crm_record.id,
+        details={
+            "provider": "test",
+            "object_type": "ticket",
+            "external_id": crm_record.external_id,
+        },
+        is_demo=True,
+    )
+    webhook = WebhookDelivery(
+        organization_id=organization.id,
+        conversation_id=third.id,
+        event="conversation.sent",
+        target_url="http://n8n:5678/webhook/leadops-demo",
+        payload={
+            "event": "conversation.sent",
+            "organization_id": organization.id,
+            "conversation": {
+                "id": third.id,
+                "reference": third.public_reference,
+                "subject": third.subject,
+                "status": third.status,
+            },
+        },
+        status="failed",
+        attempt_count=1,
+        last_error="Demo delivery: connect n8n to retry this webhook.",
+        last_attempt_at=utcnow(),
+        is_demo=True,
+    )
+    db.add(webhook)
+    db.flush()
+    log_activity(
+        db,
+        organization_id=organization.id,
+        user_id=admin.id,
+        conversation_id=third.id,
+        action="webhook.failed",
+        entity_type="webhook_delivery",
+        entity_id=webhook.id,
+        level="error",
+        details={
+            "target_url": webhook.target_url,
+            "status": webhook.status,
+            "attempt": webhook.attempt_count,
+            "error": webhook.last_error,
+        },
+        is_demo=True,
     )
     log_activity(
         db,

@@ -2,10 +2,17 @@ from __future__ import annotations
 
 import base64
 import hashlib
+import os
 from functools import lru_cache
 
-from pydantic import field_validator
+from pydantic import Field, field_validator
 from pydantic_settings import BaseSettings, SettingsConfigDict
+
+
+def default_database_url() -> str:
+    if os.getenv("VERCEL"):
+        return "sqlite:////tmp/leadops.db"
+    return "sqlite:///./leadops.db"
 
 
 class Settings(BaseSettings):
@@ -16,7 +23,7 @@ class Settings(BaseSettings):
     )
 
     app_env: str = "development"
-    database_url: str = "sqlite:///./leadops.db"
+    database_url: str = Field(default_factory=default_database_url)
     cors_origins: str = "http://localhost:3000"
     frontend_url: str = "http://localhost:3000"
     jwt_secret: str = ""
@@ -64,4 +71,3 @@ class Settings(BaseSettings):
 @lru_cache
 def get_settings() -> Settings:
     return Settings()
-

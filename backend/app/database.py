@@ -1,10 +1,12 @@
 from __future__ import annotations
 
+import os
 from collections.abc import Iterator
 from pathlib import Path
 
 from sqlalchemy import create_engine, event, inspect
 from sqlalchemy.orm import DeclarativeBase, Session, sessionmaker
+from sqlalchemy.pool import NullPool
 
 from .config import get_settings
 
@@ -18,8 +20,17 @@ def normalize_database_url(url: str) -> str:
 
 
 DATABASE_URL = normalize_database_url(get_settings().database_url)
-connect_args = {"check_same_thread": False} if DATABASE_URL.startswith("sqlite") else {}
-engine = create_engine(DATABASE_URL, connect_args=connect_args, pool_pre_ping=True)
+if DATABASE_URL.startswith("sqlite"):
+    connect_args = {"check_same_thread": False}
+else:
+    connect_args = {"prepare_threshold": None} if os.getenv("VERCEL") else {}
+engine_options = {
+    "connect_args": connect_args,
+    "pool_pre_ping": True,
+}
+if os.getenv("VERCEL") and not DATABASE_URL.startswith("sqlite"):
+    engine_options["poolclass"] = NullPool
+engine = create_engine(DATABASE_URL, **engine_options)
 
 if DATABASE_URL.startswith("sqlite"):
 
@@ -61,4 +72,3 @@ def init_db() -> None:
     if tables and "alembic_version" not in tables:
         command.stamp(config, "head")
     command.upgrade(config, "head")
-

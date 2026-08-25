@@ -1,6 +1,6 @@
 "use client";
 
-import { Bot, Check, LockKeyhole, MessageSquareText, ShieldCheck } from "lucide-react";
+import { Check, LockKeyhole, MessageSquareText, ShieldCheck } from "lucide-react";
 import { useParams } from "next/navigation";
 import Link from "next/link";
 import { useEffect, useState } from "react";
@@ -62,7 +62,7 @@ export default function PublicContactPage() {
   return (
     <div className="public-page">
       <header className="public-topbar">
-        <div className="public-brand"><span className="brand-mark small"><Bot size={17} /></span>LeadOps AI</div>
+        <div className="public-brand"><span className="brand-mark small" aria-hidden="true">L/O</span>LeadOps AI</div>
         <div className="public-safe"><LockKeyhole size={13} />Your message is reviewed by a person before a reply is sent</div>
       </header>
       <main className="public-layout">
@@ -70,8 +70,8 @@ export default function PublicContactPage() {
           <p className="eyebrow">Contact {config?.organization_name || "the team"}</p>
           <h1>Tell us what you need.</h1>
           <p>
-            Give us enough detail to route the message to the right person. The team will review the
-            suggested answer and its sources before you receive anything.
+            Share the details the team needs to handle your request. A person will review the reply
+            and its sources before it is sent.
           </p>
           <div className="public-points">
             <div className="public-point"><span><Check size={13} /></span>Your message gets a clear reference number</div>

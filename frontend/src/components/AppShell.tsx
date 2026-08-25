@@ -4,8 +4,6 @@ import {
   Activity,
   BarChart3,
   BookOpen,
-  Bot,
-  Boxes,
   ChevronDown,
   Inbox,
   LogOut,
@@ -39,10 +37,10 @@ export function AppShell({ children }: { children: ReactNode }) {
   const sidebar = (
     <aside className="sidebar">
       <div className="brand-row">
-        <span className="brand-mark"><Bot size={19} /></span>
+        <span className="brand-mark" aria-hidden="true">L/O</span>
         <div>
           <strong>LeadOps AI</strong>
-          <span>Human-approved support</span>
+          <span>Customer operations</span>
         </div>
         <button className="mobile-close" onClick={() => setMobileOpen(false)} aria-label="Close menu">
           <X size={20} />
@@ -50,7 +48,6 @@ export function AppShell({ children }: { children: ReactNode }) {
       </div>
 
       <div className="workspace-switcher">
-        <span className="workspace-icon"><Boxes size={16} /></span>
         <span>
           <strong>{organization?.name}</strong>
           <small>{organization?.is_demo ? "Demo workspace" : "Organization"}</small>
@@ -98,7 +95,7 @@ export function AppShell({ children }: { children: ReactNode }) {
           <button className="icon-button" onClick={() => setMobileOpen(true)} aria-label="Open menu">
             <Menu size={21} />
           </button>
-          <span className="brand-mark small"><Bot size={17} /></span>
+          <span className="brand-mark small" aria-hidden="true">L/O</span>
           <strong>LeadOps AI</strong>
         </header>
         <main className="page-content">{children}</main>
@@ -106,4 +103,3 @@ export function AppShell({ children }: { children: ReactNode }) {
     </div>
   );
 }
-

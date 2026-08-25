@@ -134,9 +134,9 @@ export default function IntegrationsPage() {
   return (
     <>
       <PageHeader
-        eyebrow="Connected systems"
-        title="Integrations"
-        description="Choose where approved inquiries go. Tokens are encrypted in the backend and never returned to the browser."
+        eyebrow="Systems / Destinations"
+        title="Connect what happens next."
+        description="Choose where approved inquiries go. Access tokens are encrypted by the backend and never returned to this page."
       />
       {error ? <ErrorNotice message={error} /> : null}
       {success ? <SuccessNotice message={success} /> : null}

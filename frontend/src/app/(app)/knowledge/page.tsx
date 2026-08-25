@@ -110,9 +110,9 @@ export default function KnowledgePage() {
   return (
     <>
       <PageHeader
-        eyebrow="Grounded answers"
-        title="Knowledge base"
-        description="Add the material your team already trusts. Every draft keeps the exact passages it used."
+        eyebrow="Knowledge / Sources"
+        title="Give every answer a source."
+        description="Add the documents and pages your team trusts. LeadOps keeps the exact passages behind every draft."
       />
       {error ? <ErrorNotice message={error} /> : null}
       {success ? <SuccessNotice message={success} /> : null}

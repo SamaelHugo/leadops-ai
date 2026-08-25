@@ -35,3 +35,34 @@ def test_rag_draft_keeps_traceable_sources(db):
     assert "[1]" in draft.body
     assert 0 < draft.confidence <= 1
 
+
+def test_mock_draft_prefers_sentences_that_match_the_inquiry(db):
+    organization, user = create_tenant(db, slug="relevant-draft")
+    create_and_index_source(
+        db,
+        organization_id=organization.id,
+        created_by_id=user.id,
+        kind="text",
+        title="Sales and support guide",
+        text=(
+            "Priority support replies within two business hours. "
+            "Damaged deliveries need an order number and a photo. "
+            "Orders above 50 units qualify for volume pricing. "
+            "A sales specialist prepares the quote after receiving the required quantity."
+        ),
+    )
+    conversation = create_public_inquiry(
+        db,
+        organization_id=organization.id,
+        payload=PublicInquiryCreate(
+            name="Customer",
+            email="pricing@example.com",
+            subject="Volume price for 80 units",
+            message="How does volume pricing work for an order of 80 units?",
+        ),
+    )
+    draft = latest_draft(db, conversation)
+
+    assert draft is not None
+    assert "Orders above 50 units qualify for volume pricing." in draft.body
+    assert "Priority support" not in draft.body

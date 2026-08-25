@@ -1,6 +1,5 @@
 "use client";
 
-import { Bot, Check, FileCheck2, ShieldCheck } from "lucide-react";
 import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 
@@ -50,21 +49,19 @@ export default function LoginPage() {
     <div className="login-page">
       <section className="login-visual">
         <div className="login-brand">
-          <span className="brand-mark"><Bot size={19} /></span>
+          <span className="brand-mark" aria-hidden="true">L/O</span>
           LeadOps AI
         </div>
         <div className="login-visual-copy">
-          <span>AI support with a human checkpoint</span>
-          <h1>Move faster without losing control.</h1>
+          <span>Customer operations</span>
+          <h1>Review every reply before it leaves.</h1>
           <p>
-            LeadOps AI reads your knowledge base, prepares a sourced reply, and waits for a person
-            to approve it before anything reaches the customer or CRM.
+            LeadOps AI prepares replies from your knowledge base. Your team checks the source,
+            edits the draft, and decides when to send it.
           </p>
         </div>
         <div className="login-proof">
-          <div className="proof-item"><ShieldCheck size={15} />Tenant-separated data</div>
-          <div className="proof-item"><FileCheck2 size={15} />Traceable sources</div>
-          <div className="proof-item"><Check size={15} />Manual approval</div>
+          <span>Nothing reaches a customer or CRM until a teammate approves it.</span>
         </div>
       </section>
 
@@ -72,7 +69,7 @@ export default function LoginPage() {
         <div className="login-card">
           <p className="eyebrow">Workspace access</p>
           <h2>{mode === "login" ? "Welcome back" : "Create an organization"}</h2>
-          <p>{mode === "login" ? "Sign in to review the inbox, update replies, and run your CRM workflow." : "Set up an isolated workspace and its first administrator account."}</p>
+          <p>{mode === "login" ? "Sign in to review the inbox and send approved replies." : "Set up a separate workspace and its first administrator account."}</p>
           {error ? <ErrorNotice message={error} /> : null}
           <form className="login-form" onSubmit={submit}>
             {mode === "register" ? (

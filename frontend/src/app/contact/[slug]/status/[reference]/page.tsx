@@ -1,6 +1,6 @@
 "use client";
 
-import { Bot, CheckCircle2, Clock3, MailCheck } from "lucide-react";
+import { CheckCircle2, Clock3, MailCheck } from "lucide-react";
 import Link from "next/link";
 import { useParams } from "next/navigation";
 import { useState } from "react";
@@ -42,7 +42,7 @@ export default function InquiryStatusPage() {
   return (
     <div className="public-page">
       <header className="public-topbar">
-        <Link className="public-brand" href={`/contact/${params.slug}`}><span className="brand-mark small"><Bot size={17} /></span>LeadOps AI</Link>
+        <Link className="public-brand" href={`/contact/${params.slug}`}><span className="brand-mark small" aria-hidden="true">L/O</span>LeadOps AI</Link>
         <span className="public-safe">Inquiry {params.reference}</span>
       </header>
       <main style={{ width: "min(680px, 100%)", margin: "0 auto" }}>
@@ -81,4 +81,3 @@ export default function InquiryStatusPage() {
     </div>
   );
 }
-
