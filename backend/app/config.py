@@ -45,6 +45,11 @@ class Settings(BaseSettings):
     hubspot_base_url: str = "https://api.hubapi.com"
     webhook_timeout_seconds: float = 8.0
     seed_demo_data: bool = True
+    # Публичное демо работает на платных провайдерах, а /register создаёт
+    # организацию без ограничений и рейт-лимита. Открытая регистрация там
+    # означает, что любой посетитель индексирует документы и генерирует
+    # черновики за счёт владельца ключа, поэтому на демо её выключаем.
+    allow_public_registration: bool = True
 
     @field_validator("llm_provider")
     @classmethod

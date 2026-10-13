@@ -4,6 +4,7 @@ from fastapi import APIRouter, Depends, HTTPException
 from sqlalchemy.orm import Session
 
 from ..auth import create_access_token, hash_password, verify_password
+from ..config import get_settings
 from ..database import get_db
 from ..dependencies import get_current_user
 from ..models import Integration, Organization, User
@@ -28,6 +29,11 @@ def _auth_response(user: User) -> AuthResponse:
 
 @router.post("/register", response_model=AuthResponse, status_code=201)
 def register_organization(payload: OrganizationCreate, db: Session = Depends(get_db)) -> AuthResponse:
+    if not get_settings().allow_public_registration:
+        raise HTTPException(
+            status_code=403,
+            detail="Registration is closed on this demo. Use the provided demo credentials.",
+        )
     if db.query(Organization).filter(Organization.slug == payload.organization_slug).first():
         raise HTTPException(status_code=409, detail="This organization URL is already in use.")
     organization = Organization(name=payload.organization_name, slug=payload.organization_slug)

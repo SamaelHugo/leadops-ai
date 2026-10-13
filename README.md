@@ -79,9 +79,17 @@ Create a Vercel project with the Services framework preset, then add these envir
 DATABASE_URL=postgresql://...
 JWT_SECRET=<at least 32 random characters>
 SEED_DEMO_DATA=true
-LLM_PROVIDER=mock
-EMBEDDINGS_PROVIDER=local
+LLM_PROVIDER=openai
+EMBEDDINGS_PROVIDER=openai
+OPENAI_API_KEY=<key with a spend cap>
+ALLOW_PUBLIC_REGISTRATION=false
 ```
+
+Use the real providers for a demo you show to prospects. `EMBEDDINGS_PROVIDER=local` is a signed hashing vectorizer over unigrams and bigrams: it matches shared words, not meaning, so a paraphrased question misses. `LLM_PROVIDER=mock` returns deterministic canned text. Both are fine offline and misleading in front of someone evaluating retrieval quality.
+
+Pick the provider before the first boot. Seeding indexes the demo knowledge base with whatever embedding provider is configured, and vectors from the hashing path are not comparable with OpenAI vectors. Switching later requires re-indexing every source.
+
+`ALLOW_PUBLIC_REGISTRATION=false` closes `POST /api/auth/register`. The endpoint creates an organization with no rate limit, so on a public deployment with a paid key any visitor could index documents and generate drafts at your expense. Hand out the seeded demo credentials instead, and set a spend cap on the key itself as the real backstop.
 
 Use a pooled PostgreSQL connection for serverless traffic. Supabase transaction pooler connections use port `6543`; LeadOps disables prepared statements and application-side pooling when it runs on Vercel.
 
