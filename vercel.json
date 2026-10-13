@@ -1,19 +1,24 @@
 {
   "$schema": "https://openapi.vercel.sh/vercel.json",
-  "experimentalServices": {
+  "services": {
     "frontend": {
-      "workspace": "frontend",
-      "framework": "nextjs",
-      "routePrefix": "/"
+      "root": "frontend",
+      "framework": "nextjs"
     },
     "backend": {
-      "entrypoint": "backend/main.py",
-      "routePrefix": "/backend",
-      "maxDuration": 60,
-      "includeFiles": [
-        "backend/alembic.ini",
-        "backend/migrations/**"
-      ]
+      "root": "backend",
+      "entrypoint": "main.py",
+      "framework": "fastapi"
     }
-  }
+  },
+  "rewrites": [
+    {
+      "source": "/backend/:path*",
+      "destination": {
+        "type": "service",
+        "service": "backend",
+        "path": "/backend/:path*"
+      }
+    }
+  ]
 }
