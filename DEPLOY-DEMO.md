@@ -5,7 +5,15 @@
 
 ## Состояние на 13.10.2026, вечер
 
-**Демо развёрнуто и отвечает: https://leadops-ai-nine.vercel.app**
+**Демо развёрнуто, работает на реальных провайдерах и прошло приёмку: https://leadops-ai-nine.vercel.app**
+
+`/api/health` отдаёт `{"status":"ok","llm_provider":"openai","embeddings_provider":"openai","database":"postgresql"}`.
+
+Приёмка 13.10.2026:
+
+- Вопрос, перефразированный БЕЗ единого слова из документа («If we pay for the quicker assistance option, how soon will somebody get back to us?») → ответ «...which is Priority support, you can expect a response within two business hours [1]», источник процитирован, уверенность 1.0. Именно этого локальный хеширующий режим не мог: там Top-1 был на уровне случайного выбора.
+- Вопрос, ответа на который в базе нет (студенческая скидка) → система не выдумала ответ, написала, что сведений нет, уверенность упала до 0.3.
+- Регистрация закрыта: 403.
 
 Сделано полностью: проект на Vercel создан и привязан к репозиторию, оба сервиса
 распознаны (frontend Next.js на `/`, backend FastAPI на `/api/*`), сборка зелёная,
